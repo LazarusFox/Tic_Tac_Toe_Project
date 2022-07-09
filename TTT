@@ -1,0 +1,107 @@
+tab = "         " # poczatkowy grid
+
+print("---------")
+print("|" + " " + tab[0] + " " + tab[1] + " " + tab[2] + " " + "|")
+print("|" + " " + tab[3] + " " + tab[4] + " " + tab[5] + " " + "|")
+print("|" + " " + tab[6] + " " + tab[7] + " " + tab[8] + " " + "|")
+print("---------")
+
+player = 1  # jesli nieparzyste to gracz X jesli parzyste, gracz O
+Flag_Draw = 0  # remis
+Flag_X_Win = 0  # X won
+Flag_O_Win = 0  # Y won
+
+while 1: # petla gry
+    x, y = input("Podaj wspolrzedne graczu: ").split()
+
+    try:
+        x = int(x)
+        y = int(y)
+    except ValueError:
+        print("You should enter numbers!")
+        continue
+
+    z = -1
+
+    if x == 1 and y == 1:
+        z = 0  # wspolrzedna na tablicy
+    elif x == 1 and y == 2:
+        z = 1
+    elif x == 1 and y == 3:
+        z = 2
+    elif x == 2 and y == 1:
+        z = 3
+    elif x == 2 and y == 2:
+        z = 4
+    elif x == 2 and y == 3:
+        z = 5
+    elif x == 3 and y == 1:
+        z = 6
+    elif x == 3 and y == 2:
+        z = 7
+    elif x == 3 and y == 3:
+        z = 8
+    elif x > 3 or y > 3 or x < 1 or y < 1:
+        print("Coordinates shouold be from 1 to 3!")
+        continue
+
+    if tab[z] == "X" or tab[z] == "O":  # jesli komorka jest zajeta to popros o jeszcze raz
+        print("This cell is occupied! Choose another one!")
+        continue
+
+    if player % 2 == 1:
+        # zmiana konkretnego znaku z "_" na "X"
+        temp = list(tab)
+        temp[z] = "X"
+        tab = "".join(temp)
+    else:
+        # zmiana konkretnego znaku z "_" na "O"
+        temp = list(tab)
+        temp[z] = "O"
+        tab = "".join(temp)
+
+    player += 1
+
+    print("---------")
+    print("|" + " " + tab[0] + " " + tab[1] + " " + tab[2] + " " + "|")
+    print("|" + " " + tab[3] + " " + tab[4] + " " + tab[5] + " " + "|")
+    print("|" + " " + tab[6] + " " + tab[7] + " " + tab[8] + " " + "|")
+    print("---------")
+
+    # Warunek wygranej X w poziomie, w pionie i na skos
+    if tab[0] == tab[1] == tab[2] == "X" or tab[3] == tab[4] == tab[5] == "X" or tab[6] == tab[7] == tab[8] == "X":
+    # ten powyzszy If mozna byloby zrobic jakos sprytniej, bo to sa 3 kolejne elementy odzdzielone co 3
+        Flag_X_Win = 1
+    elif tab[0] == tab[3] == tab[6] == "X" or tab[1] == tab[4] == tab[7] == "X" or tab[2] == tab[5] == tab[8] == "X":
+    # Tutaj ponownie masz ten sam warunek powtorzony trzy razy, wiec moze jest jakis sprytniejszy sposob
+        Flag_X_Win = 1
+    elif tab[0] == tab[4] == tab[8] == "X" or tab[2] == tab[4] == tab[6] == "X":
+    # Jedynie tutaj chyba nie da sie wymyslic czegos fajnego, zeby nie pisac recznie wspolrzednych
+        Flag_X_Win = 1
+    # Patrz wyzej
+    # Warunek wygranej O w poziomie, w pionie i na skos
+    if tab[0] == tab[1] == tab[2] == "O" or tab[3] == tab[4] == tab[5] == "O" or tab[6] == tab[7] == tab[8] == "O":
+        Flag_O_Win = 1
+    elif tab[0] == tab[3] == tab[6] == "O" or tab[1] == tab[4] == tab[7] == "O" or tab[2] == tab[5] == tab[8] == "O":
+        Flag_O_Win = 1
+    elif tab[0] == tab[4] == tab[8] == "O" or tab[2] == tab[4] == tab[6] == "O":
+        Flag_O_Win = 1
+
+    count__ = 0  # ilosc pustych znakow, reset
+
+    for el in tab:
+        if el == " ":
+            count__ += 1
+
+    if count__ == 0:
+        Flag_Draw = 1
+
+    if Flag_X_Win == 1:
+        print("X Wins")
+        break
+    elif Flag_O_Win == 1:
+        print("O Wins")
+        break
+    elif Flag_Draw == 1:
+        print("Draw")
+        break
